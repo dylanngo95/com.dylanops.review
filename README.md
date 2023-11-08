@@ -46,3 +46,10 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/com.dylanops.review-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+
+
+# Add self cert to Java JVM
+
+/opt/homebrew/opt/graalvm-jdk-17.0.9+11.1/Contents/Home/lib/security/cacerts
+
+keytool -list -v -keystore /opt/homebrew/opt/graalvm-jdk-17.0.9+11.1/Contents/Home/lib/security/cacerts  > java_cacerts.txt

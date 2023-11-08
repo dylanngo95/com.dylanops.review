@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:8.0.35-oracle
+    container_name: quarkus-mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - app
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.5
+    container_name: quarkus-keycloak
+    command: ["start --optimized --hostname=sso.dylanops.com --https-port=8180 --https-certificate-file=/tmp/keycloak-server.crt.pem --https-certificate-key-file=/tmp/keycloak-server.key.pem"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      DB_ADDR: mysql
+      DB_PORT: 3306
+      DB_DATABASE: keycloak
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_JDBC_PARAMS: useSSL=false&allowPublicKeyRetrieval=true
+    volumes:
+      - ./config/keycloak-server.crt.pem:/tmp/keycloak-server.crt.pem
+      - ./config/keycloak-server.key.pem:/tmp/keycloak-server.key.pem
+    ports:
+      - 8180:8180
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
+
+networks:
+  app:
+    driver: bridge
