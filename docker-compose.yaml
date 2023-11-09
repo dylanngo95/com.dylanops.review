@@ -18,7 +18,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.5
     container_name: quarkus-keycloak
-    command: ["start --optimized --hostname-url=sso.dylanops.com --proxy=edge"]
+    command: ["start --optimized --hostname=sso.dylanops.com --proxy=edge"]
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
