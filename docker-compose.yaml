@@ -32,7 +32,7 @@ services:
       - ./config/keycloak-server.crt.pem:/tmp/keycloak-server.crt.pem
       - ./config/keycloak-server.key.pem:/tmp/keycloak-server.key.pem
     ports:
-      - 443:443
+      - 443:8080
     depends_on:
       - mysql
 
