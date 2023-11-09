@@ -18,7 +18,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.5
     container_name: quarkus-keycloak
-    command: ["start --optimized --hostname-url=https://sso.dylanops.com --proxy=edge"]
+    command: ["start --optimized --hostname-url=http://sso.dylanops.com --proxy=edge"]
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -32,7 +32,7 @@ services:
       - ./config/keycloak-server.crt.pem:/tmp/keycloak-server.crt.pem
       - ./config/keycloak-server.key.pem:/tmp/keycloak-server.key.pem
     ports:
-      - 443:443
+      - 80:80
     depends_on:
       - mysql
 
