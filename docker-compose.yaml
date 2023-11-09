@@ -18,7 +18,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.5
     container_name: quarkus-keycloak
-    command: ["start --optimized --hostname=sso.dylanops.com --https-port=443 --https-certificate-file=/tmp/keycloak-server.crt.pem --https-certificate-key-file=/tmp/keycloak-server.key.pem"]
+    command: ["start --optimized --hostname=sso.dylanops.com --proxy=edge"]
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
