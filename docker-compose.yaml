@@ -1,41 +1,41 @@
 version: '3.7'
 
 services:
-  mysql:
-    image: mysql:8.0.35-oracle
-    container_name: quarkus-mysql8
-    volumes:
-      - mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "3306:3306"
-    networks:
-      - app
+#  mysql:
+#    image: mysql:8.0.35-oracle
+#    container_name: quarkus-mysql8
+#    volumes:
+#      - mysql-data:/var/lib/mysql
+#    environment:
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#    ports:
+#      - "3306:3306"
+#    networks:
+#      - app
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.0
     container_name: quarkus-keycloak
-    command: ["start", "--optimized", "--hostname-debug=true", "--hostname-admin=sso.dylanops.com", "--hostname=sso.dylanops.com","--hostname-port=443","--https-certificate-file=/tmp/keycloak-server.crt.pem", "--https-certificate-key-file=/tmp/keycloak-server.key.pem"]
+    command: ["start", "--proxy=edge", "--hostname=127.0.0.1", "--hostname-strict=false"]
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      DB_ADDR: mysql
-      DB_PORT: 3306
-      DB_DATABASE: keycloak
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
-      DB_JDBC_PARAMS: useSSL=false&allowPublicKeyRetrieval=true
+#      DB_ADDR: mysql
+#      DB_PORT: 3306
+#      DB_DATABASE: keycloak
+#      DB_USER: ${MYSQL_USER}
+#      DB_PASSWORD: ${MYSQL_PASSWORD}
+#      DB_JDBC_PARAMS: useSSL=false&allowPublicKeyRetrieval=true
     volumes:
       - ./config/fullchain.pem:/tmp/keycloak-server.crt.pem
       - ./config/privkey.pem:/tmp/keycloak-server.key.pem
     ports:
       - 8080:8080
-      - 443:8443
-    depends_on:
-      - mysql
+      - 8443:8443
+#    depends_on:
+#      - mysql
 
 volumes:
   mysql-data:
