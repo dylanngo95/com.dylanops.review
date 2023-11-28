@@ -53,3 +53,13 @@ If you want to learn more about building native executables, please consult http
 /opt/homebrew/opt/graalvm-jdk-17.0.9+11.1/Contents/Home/lib/security/cacerts
 
 keytool -list -v -keystore /opt/homebrew/opt/graalvm-jdk-17.0.9+11.1/Contents/Home/lib/security/cacerts  > java_cacerts.txt
+
+# Starting optimized
+
+docker rm mykeycloak \
+|| docker run --name mykeycloak -p 3000:8443 \
+-e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin \
+quay.io/keycloak/keycloak:23.0.0 \
+start --optimized --hostname-port=3000 --hostname=sso.dylanops.com \
+--https-certificate-file=/Users/dylan/quarkus/com.dylanops.review/config/keycloak-server.crt.pem \
+--https-certificate-key-file=/Users/dylan/quarkus/com.dylanops.review/config/keycloak-server.key.pem
