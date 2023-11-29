@@ -1,41 +1,41 @@
 version: '3.7'
 
 services:
-#  mysql:
-#    image: mysql:8.0.35-oracle
-#    container_name: quarkus-mysql8
-#    volumes:
-#      - mysql-data:/var/lib/mysql
-#    environment:
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#    ports:
-#      - "3306:3306"
-#    networks:
-#      - app
+  mysql:
+    image: mysql:8.0.35-oracle
+    container_name: quarkus-mysql8
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - app
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.0
     container_name: quarkus-keycloak
-    command: ["start", "--proxy=edge", "--hostname=127.0.0.1", "--hostname-strict=false"]
+    command: ["start"]
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-#      DB_ADDR: mysql
-#      DB_PORT: 3306
-#      DB_DATABASE: keycloak
-#      DB_USER: ${MYSQL_USER}
-#      DB_PASSWORD: ${MYSQL_PASSWORD}
-#      DB_JDBC_PARAMS: useSSL=false&allowPublicKeyRetrieval=true
-    volumes:
-      - ./config/fullchain.pem:/tmp/keycloak-server.crt.pem
-      - ./config/privkey.pem:/tmp/keycloak-server.key.pem
+      KC_PROXY: edge
+      KC_HOSTNAME: sso.dylanops.com
+      KC_HOSTNAME_STRICT: false
+#      KC_DB: mysql
+#      KC_DB_SCHEMA: keycloak
+#      KC_DB_URL_HOST: mysql
+#      KC_DB_URL: jdbc:mysql://mysql/keycloak
+#      KC_DB_USERNAME: ${MYSQL_USER}
+#      KC_DB_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - 8080:8080
       - 8443:8443
-#    depends_on:
-#      - mysql
+    depends_on:
+      - mysql
 
 volumes:
   mysql-data:
