@@ -1,18 +1,15 @@
 version: '3.7'
 
 services:
-  mysql:
-    image: mysql:8.0.35-oracle
-    container_name: quarkus-mysql8
-    volumes:
-      - mysql-data:/var/lib/mysql
+  postgres:
+    image: postgres:16
+    container_name: quarkus-postgres16
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "3306:3306"
+      - "5432:5432"
     networks:
       - app
   keycloak:
@@ -22,23 +19,24 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_LOGLEVEL: DEBUG
+      ROOT_LOGLEVEL: DEBUG
       KC_PROXY: edge
       KC_HOSTNAME: sso.dylanops.com
       KC_HOSTNAME_STRICT: false
-#      KC_DB: mysql
+#      KC_DB: postgres
+#      KC_DB_URL: jdbc:postgresql://postgres/keycloak
 #      KC_DB_SCHEMA: keycloak
-#      KC_DB_URL_HOST: mysql
-#      KC_DB_URL: jdbc:mysql://mysql/keycloak
-#      KC_DB_USERNAME: ${MYSQL_USER}
-#      KC_DB_PASSWORD: ${MYSQL_PASSWORD}
+#      KC_DB_USERNAME: ${POSTGRES_USER}
+#      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 8080:8080
       - 8443:8443
     depends_on:
-      - mysql
+      - postgres
 
 volumes:
-  mysql-data:
+  postgres-data:
 
 networks:
   app:
